@@ -10,11 +10,9 @@ func TestPrintHelloMessage(t *testing.T) {
 	t.Parallel()
 	fakeTerminal := &bytes.Buffer{}
 
-	print := &hello.Printer{
-		Output: fakeTerminal,
-	}
+	hello.Print()
 
-	print.PrintTo()
+	//print.PrintTo()
 
 	want := "Hello, world\n"
 	got := fakeTerminal.String()
