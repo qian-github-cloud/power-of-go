@@ -3,6 +3,7 @@ package option
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 )
@@ -65,12 +66,16 @@ func (c count) Lines() int {
 }
 
 //
-func Lines() (int, error) {
-	c, err := NewCount()
+func Lines() int {
+	fmt.Println(os.Args[1:])
+	c, err := NewCount(
+		WithInputFromArgs(os.Args[1:]),
+	)
 	if err != nil {
-		return 0, err
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
-	return c.Lines(), nil
+	return c.Lines()
 }
 
 func WithInputFromArgs(args []string) option {

@@ -9,7 +9,7 @@ import (
 func TestOption(t *testing.T) {
 	t.Parallel()
 
-	args := []string{"tetstdata/three_lines.txt"}
+	args := []string{"testdata/three_lines.txt"}
 
 	c, err := option.NewCount(
 		option.WithInputFromArgs(args),

@@ -1,12 +1,12 @@
 package main
 
-import "fmt"
+import (
+	option "08"
+	"fmt"
+)
 
 func main() {
-	e := New("this is  a  test ")
-	if e != nil {
-		fmt.Println(e)
-	}
+	fmt.Println(option.Lines())
 }
 func New(text string) error {
 	return &errorString{text}
