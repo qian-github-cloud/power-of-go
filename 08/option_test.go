@@ -19,7 +19,7 @@ func TestOption(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	want := 3
+	want := 4
 	got := c.Lines()
 
 	if want != got {
