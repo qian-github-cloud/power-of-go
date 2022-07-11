@@ -27,3 +27,25 @@ func TestWords(t *testing.T) {
 	}
 
 }
+
+func TestWordsWithFlag(t *testing.T) {
+	t.Parallel()
+
+	args := []string{"-w", "testdata/three_lines.txt"}
+
+	c, err := count.NewCount(
+		count.FromArgs(args),
+	)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := 6
+	got := c.Words()
+
+	if want != got {
+		t.Errorf("want %d , but got %d", want, got)
+	}
+
+}

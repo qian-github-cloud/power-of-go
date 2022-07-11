@@ -115,3 +115,14 @@ func (c *count) Words() int {
 	}
 	return words
 }
+
+func FromArgs(args []string) option {
+	return func(c *count) error {
+		f, err := os.Open(args[0])
+		if err != nil {
+			return err
+		}
+		c.Input = f
+		return nil
+	}
+}
