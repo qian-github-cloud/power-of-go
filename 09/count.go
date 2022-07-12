@@ -3,14 +3,16 @@ package count
 import (
 	"bufio"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"os"
 )
 
 type count struct {
-	Input  io.Reader
-	Output io.Writer
+	Input     io.Reader
+	Output    io.Writer
+	wordCount bool
 }
 
 //
@@ -118,11 +120,42 @@ func (c *count) Words() int {
 
 func FromArgs(args []string) option {
 	return func(c *count) error {
+		fmt.Println("os-Args", os.Args[0])
+		//fmt.Println(args[0])
+		fset := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+
+		wordCount := fset.Bool("w", false, "Count words instead of lines")
+
+		err := fset.Parse(args)
+
+		if err != nil {
+			return err
+		}
+
+		c.wordCount = *wordCount
+
+		args := fset.Args()
+		fmt.Println("args", args)
+		if len(args) < 1 {
+			return nil
+		}
+
 		f, err := os.Open(args[0])
 		if err != nil {
 			return err
 		}
 		c.Input = f
 		return nil
+	}
+}
+
+func RunCLi() {
+	c, err := NewCount(
+		FromArgs(os.Args[1:]),
+	)
+	if err != nil {
+		fmt.Println(c.Words())
+	} else {
+		fmt.Println(c.Lines())
 	}
 }

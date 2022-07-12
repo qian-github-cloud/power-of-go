@@ -41,7 +41,7 @@ func TestWordsWithFlag(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	want := 6
+	want := 4
 	got := c.Words()
 
 	if want != got {
