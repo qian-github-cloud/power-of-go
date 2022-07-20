@@ -2,8 +2,11 @@ package count_test
 
 import (
 	"bytes"
-	count "flags"
+	count "file"
+	"os"
 	"testing"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 func TestWords(t *testing.T) {
@@ -62,4 +65,35 @@ func TestFromArgsErrorsOnBogusFlag(t *testing.T) {
 	if err == nil {
 		t.Fatal("want error on bogus flag , got nil")
 	}
+}
+
+func TestWroteToFile(t *testing.T) {
+	t.Parallel()
+
+	path := "testdata/write_test.txt"
+
+	// 2
+	_, err := os.Stat(path)
+	if err == nil {
+		t.Fatalf("test artifact not clean up %q", path)
+	}
+
+	defer os.Remove(path)
+	want := []byte{1, 2, 3}
+
+	err = count.WriteToFile(path, want)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !cmp.Equal(want, got) {
+		t.Fatal(cmp.Diff(want, got))
+	}
+
 }
