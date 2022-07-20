@@ -70,18 +70,11 @@ func TestFromArgsErrorsOnBogusFlag(t *testing.T) {
 func TestWroteToFile(t *testing.T) {
 	t.Parallel()
 
-	path := "testdata/write_test.txt"
+	path := t.TempDir() + "/write_test.txt"
 
-	// 2
-	_, err := os.Stat(path)
-	if err == nil {
-		t.Fatalf("test artifact not clean up %q", path)
-	}
-
-	defer os.Remove(path)
 	want := []byte{1, 2, 3}
 
-	err = count.WriteToFile(path, want)
+	err := count.WriteToFile(path, want)
 
 	if err != nil {
 		t.Fatal(err)
