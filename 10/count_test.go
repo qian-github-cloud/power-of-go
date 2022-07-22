@@ -72,9 +72,13 @@ func TestWroteToFile(t *testing.T) {
 
 	path := t.TempDir() + "/write_test.txt"
 
-	want := []byte{1, 2, 3}
+	err := os.WriteFile(path, []byte{4, 5, 6}, 0600)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	err := count.WriteToFile(path, want)
+	want := []byte{1, 2, 3}
+	err = count.WriteToFile(path, want)
 
 	if err != nil {
 		t.Fatal(err)
@@ -87,6 +91,33 @@ func TestWroteToFile(t *testing.T) {
 
 	if !cmp.Equal(want, got) {
 		t.Fatal(cmp.Diff(want, got))
+	}
+
+}
+
+func TestPermsClosed(t *testing.T) {
+	t.Parallel()
+
+	path := t.TempDir() + "/perms_test.txt"
+
+	err := os.WriteFile(path, []byte{}, 0644)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = count.WriteToFile(path, []byte{1, 2, 3})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	stat, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	perm := stat.Mode().Perm()
+	if perm != 0600 {
+		t.Errorf("want file mode 0600, but got 0%o", perm)
 	}
 
 }
