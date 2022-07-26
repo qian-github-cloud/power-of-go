@@ -1,17 +1,32 @@
 package count
 
 import (
+	"io/fs"
+	"log"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 func CountGoFiles(folder string, count int) int {
 
-	files, err := os.ReadDir(folder)
+	fsys := os.DirFS(folder)
+
+	match, err := fs.Glob(fsys, "*.go")
 	if err != nil {
-		return count
+		log.Fatal(err)
 	}
+
+	fs.WalkDir(fsys, ".", func(p string, d fs.DirEntry, err error) error {
+
+		if filepath.Ext(p) == ".go" {
+			count++
+		}
+		return nil
+	})
+
 	for _, f := range files {
+
 		if f.IsDir() {
 			count = CountGoFiles(folder+"/"+f.Name(), count)
 		}
