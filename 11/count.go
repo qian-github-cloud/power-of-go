@@ -2,7 +2,6 @@ package count
 
 import (
 	"io/fs"
-	"os"
 	"path/filepath"
 )
 
@@ -36,9 +35,7 @@ import (
 // 	return count
 // }
 
-func Files(path string) (count int) {
-
-	fsys := os.DirFS(path)
+func Files(fsys fs.FS) (count int) {
 
 	fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, err error) error {
 		if filepath.Ext(path) == ".go" {
