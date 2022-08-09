@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"shell"
 )
@@ -13,12 +12,13 @@ func main() {
 	for {
 		line, err := input.ReadString('\n')
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println("\n Be seeing you!")
+			break
 		}
 
 		cmd, err := shell.CmdFromString(line)
 		if err != nil {
-			log.Fatal(err)
+			continue
 		}
 		out, err := cmd.CombinedOutput()
 		if err != nil {
